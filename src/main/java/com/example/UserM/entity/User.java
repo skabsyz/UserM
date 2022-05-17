@@ -17,7 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @Entity
-@Table(name = "User")
+@Table(name = "User")//it will create table with name User in db
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
