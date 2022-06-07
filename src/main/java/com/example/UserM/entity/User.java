@@ -1,5 +1,6 @@
 package com.example.UserM.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -12,13 +13,19 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @Entity
 @Table(name = "User")//it will create table with name User in db
-public class User {
+
+
+//@OptimisticLocking(type=OptimisticLockType.ALL)
+public class User //implements Serializable 
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
@@ -38,9 +45,11 @@ public class User {
 	private LocalDateTime dob;
 	// @UpdateTimestamp
 	private LocalDateTime dob1;
+	@Version                         // this will allow only one time 
+    private long version=1L;
 
 	public User(int id, String name, String password, String email, String city, String mobile, LocalDateTime dob,
-			LocalDateTime dob1, String role) {
+			LocalDateTime dob1, String role, long version) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -51,6 +60,15 @@ public class User {
 		this.dob = dob;
 		this.dob1 = dob1;
 		this.role = role;
+		this.version=version;
+	}
+
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
 	}
 
 	public LocalDateTime getDob1() {
@@ -135,7 +153,9 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", password=" + password + ", email=" + email + ", city=" + city
-				+ ", mobile=" + mobile + ", dob=" + dob + ", dob1=" + dob1 + ", role=" + role + "]";
+				+ ", mobile=" + mobile + ", dob=" + dob + ", dob1=" + dob1 + ", version=" + version + ", role=" + role
+				+ "]";
 	}
+
 
 }
